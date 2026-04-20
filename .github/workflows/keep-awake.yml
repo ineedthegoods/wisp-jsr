@@ -1,7 +1,10 @@
 name: Keep Render Backend Awake
+
 on:
+  # Run every 10 minutes
   schedule:
-    - cron: '*/10 * * * *'  # every 10 minutes
+    - cron: '*/10 * * * *'
+  # Allow manual trigger
   workflow_dispatch:
 
 jobs:
@@ -10,4 +13,10 @@ jobs:
     steps:
       - name: Ping Render backend health endpoint
         run: |
-          curl -fsS https://wisp-js-0nma.onrender.com/actuator/health || true
+          echo "Pinging Render backend at $(date -u)..."
+          RESPONSE=$(curl -fsS -o /dev/null -w "%{http_code}" https://wisp-js-0nma.onrender.com/actuator/health || echo "000")
+          if [ "$RESPONSE" = "200" ]; then
+            echo "✅ Backend is alive (HTTP $RESPONSE)"
+          else
+            echo "⚠️ Backend ping failed or returned HTTP $RESPONSE"
+          fi
