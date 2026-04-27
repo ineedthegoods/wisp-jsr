@@ -14,7 +14,7 @@ jobs:
       - name: Ping Render backend health endpoint
         run: |
           echo "Pinging Render backend at $(date -u)..."
-          RESPONSE=$(curl -fsS -o /dev/null -w "%{http_code}" https://wisp-js-0nma.onrender.com/actuator/health || echo "000")
+          RESPONSE=$(curl -fsS -o /dev/null -w "%{http_code}" https://wisp-jsr.onrender.com/actuator/health || echo "000")
           if [ "$RESPONSE" = "200" ]; then
             echo "✅ Backend is alive (HTTP $RESPONSE)"
           else
